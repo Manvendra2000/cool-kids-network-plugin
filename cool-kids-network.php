@@ -31,6 +31,8 @@ register_activation_hook(__FILE__, 'ckn_create_roles');
 
 // Register a shortcode for the registration form
 function ckn_registration_form() {
+    ob_start(); // Start output buffering
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ckn_email'])) {
         $email = sanitize_email($_POST['ckn_email']);
         $user_id = ckn_create_user_and_character($email);
@@ -47,9 +49,10 @@ function ckn_registration_form() {
         <button type="submit">Confirm</button>
     </form>
     <?php
+
+    return ob_get_clean(); // Return the buffered content
 }
 add_shortcode('ckn_registration', 'ckn_registration_form');
-
 
 // Function to create a user and generate a character
 function ckn_create_user_and_character($email) {
@@ -89,6 +92,7 @@ function ckn_create_user_and_character($email) {
 
 // Register a shortcode for the login form
 function ckn_login_form() {
+    ob_start();
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ckn_login_email'])) {
         $email = sanitize_email($_POST['ckn_login_email']);
         $user = get_user_by('email', $email);
@@ -108,11 +112,13 @@ function ckn_login_form() {
         <button type="submit">Login</button>
     </form>
     <?php
+    return ob_get_clean();
 }
 add_shortcode('ckn_login', 'ckn_login_form');
 
 // Register a shortcode for the profile page
 function ckn_profile_page() {
+    ob_start();
     if (is_user_logged_in()) {
         $user_id = get_current_user_id();
         $first_name = get_user_meta($user_id, 'first_name', true);
@@ -129,11 +135,13 @@ function ckn_profile_page() {
     } else {
         echo "<p>Please log in to view your profile.</p>";
     }
+    return ob_get_clean();
 }
 add_shortcode('ckn_profile', 'ckn_profile_page');
 
 // Register a shortcode for the user list (Cooler Kid and Coolest Kid only)
 function ckn_user_list() {
+    ob_start();
     if (is_user_logged_in()) {
         $current_user = wp_get_current_user();
         $current_user_role = $current_user->roles[0]; // Get the user's role slug
@@ -153,11 +161,13 @@ function ckn_user_list() {
     } else {
         echo "<p>Please log in to view this page.</p>";
     }
+    return ob_get_clean();
 }
 add_shortcode('ckn_user_list', 'ckn_user_list');
 
 // Register a shortcode for the user list with email and role (Coolest Kid only)
 function ckn_user_list_full() {
+    ob_start();
     if (is_user_logged_in()) {
         $current_user = wp_get_current_user();
         $current_user_role = $current_user->roles[0]; // Get the user's role slug
@@ -179,6 +189,7 @@ function ckn_user_list_full() {
     } else {
         echo "<p>Please log in to view this page.</p>";
     }
+    return ob_get_clean();
 }
 add_shortcode('ckn_user_list_full', 'ckn_user_list_full');
 
