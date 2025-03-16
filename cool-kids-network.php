@@ -4,6 +4,7 @@ Plugin Name: Cool Kids Network
 Description: A plugin for managing user registration, character creation, and role-based access for the Cool Kids Network.
 Version: 1.0.0
 Author: Manvendra
+Author URL: https://react-portfolio-blush-one.vercel.app/
 */
 
 // Create custom roles on plugin activation
@@ -43,11 +44,12 @@ function ckn_registration_form() {
         }
     }
     ?>
-    <form method="post">
+    <form method="post" id="ckn-login-form">
         <label for="ckn_email">Email:</label>
-        <input type="email" name="ckn_email" id="ckn_email" required>
+        <input type="email" name="ckn_email" id="ckn_login_email" required>
         <button type="submit">Confirm</button>
     </form>
+
     <?php
 
     return ob_get_clean(); // Return the buffered content
@@ -106,11 +108,12 @@ function ckn_login_form() {
         }
     }
     ?>
-    <form method="post">
-        <label for="ckn_login_email">Email:</label>
+    <form method="post" id="ckn-login-form">
+        <label for="ckn_login_email" >Email:</label>
         <input type="email" name="ckn_login_email" id="ckn_login_email" required>
         <button type="submit">Login</button>
     </form>
+   
     <?php
     return ob_get_clean();
 }
@@ -233,3 +236,24 @@ add_action('rest_api_init', function () {
 //         },
 //     ));
 // });
+function ckn_enqueue_styles() {
+    // Enqueue custom CSS file
+    wp_enqueue_style(
+        'ckn-header-style', 
+        plugin_dir_url(__FILE__) . 'styles/ckn_header.css'
+    );
+}
+add_action('wp_enqueue_scripts', 'ckn_enqueue_styles');
+
+function ckn_enqueue_login_styles() {
+    wp_enqueue_style(
+        'ckn-login-styles', 
+        plugin_dir_url(__FILE__) . 'styles/ckn-login-styles.css'
+    );
+}
+add_action('wp_enqueue_scripts', 'ckn_enqueue_login_styles');
+
+function ckn_hide_admin_bar() {
+    show_admin_bar(false);
+}
+add_action('after_setup_theme', 'ckn_hide_admin_bar');

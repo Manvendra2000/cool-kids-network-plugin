@@ -1,0 +1,25 @@
+#logged-in-header, #logged-out-header {
+    background-color: #f4f4f4;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+#logged-in-header h1, #logged-out-header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+#logged-in-header nav, #logged-out-header nav {
+    margin-top: 10px;
+}
+
+#logged-in-header nav a, #logged-out-header nav a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #0073aa;
+}
+
+#logged-in-header nav a:hover, #logged-out-header nav a:hover {
+    text-decoration: underline;
+}
