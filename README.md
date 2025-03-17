@@ -23,6 +23,54 @@ Visit the site to explore the plugin’s functionality, including registration, 
 2. Upload the `cool-kids-network` folder to your `wp-content/plugins/` directory.
 3. Activate the plugin from the WordPress admin dashboard.
 4. Go to `functions.php` file of your current theme and apply the custom header code provided below, then initiate that in the `header.html` file of your theme.
+   ```
+   function ckn_custom_header() {
+    if (is_user_logged_in()) {
+        // Header for logged-in users
+        $user_id = get_current_user_id();
+        $first_name = get_user_meta($user_id, 'first_name', true);
+        $last_name = get_user_meta($user_id, 'last_name', true);
+        $country = get_user_meta($user_id, 'country', true);
+        $email = get_user_meta($user_id, 'email', true);
+        $role = get_user_meta($user_id, 'role', true);
+
+        // Get current user role
+        $current_user = wp_get_current_user();
+        $current_user_role = $current_user->roles[0];
+        ?>
+        <header id="logged-in-header">
+            <h1>Welcome, <?php echo esc_html($first_name) . ' ' . esc_html($last_name); ?>!</h1>
+            <!-- <p>Country: <?php echo esc_html($country); ?></p>
+            <p>Email: <?php echo esc_html($email); ?></p>
+            <p>Role: <?php echo esc_html($role); ?></p> -->
+            <nav>
+                <a href="<?php echo wp_logout_url('/'); ?>">Logout</a>
+				<a href="<?php echo home_url('/profile'); ?>">Profile</a>
+                <?php if ($current_user_role === 'cooler_kid' || $current_user_role === 'coolest_kid') : ?>
+                    <a href="<?php echo home_url('/user-list'); ?>">User List</a>
+                <?php endif; ?>
+                <?php if ($current_user_role === 'coolest_kid') : ?>
+                    <a href="<?php echo home_url('/full-user-list/'); ?>">Full User List</a>
+                <?php endif; ?>
+            </nav>
+        </header>
+        <?php
+    } else {
+        // Header for non-logged-in users
+        ?>
+        <header id="logged-out-header">
+            <h1>Welcome to Cool Kids Network!</h1>
+            <nav>
+				<a href="<?php echo home_url('/'); ?>">Home</a>
+                <a href="<?php echo home_url('/signup'); ?>">Sign Up</a>
+                <a href="<?php echo home_url('/login'); ?>">Login</a>
+            </nav>
+        </header>
+        <?php
+    }
+   }
+   add_action('wp_head', 'ckn_custom_header');
+    ```
 
 ## User Perspective
 
